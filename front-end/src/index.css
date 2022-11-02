@@ -1,0 +1,171 @@
+/*body {*/
+/*  margin: 0;*/
+/*  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',*/
+/*    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',*/
+/*    sans-serif;*/
+/*  -webkit-font-smoothing: antialiased;*/
+/*  -moz-osx-font-smoothing: grayscale;*/
+/*}*/
+
+/*code {*/
+/*  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',*/
+/*    monospace;*/
+/*}*/
+
+* {
+  box-sizing: border-box;
+  font-family: "Rockwell", "Courier New", Courier, Georgia, Times, "Times New Roman", serif;
+}
+
+body {
+  margin: 0;
+  background-color: #D8BFD8;
+}
+
+/*NAVBAR STYLES*/
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  background-color: #21c4f4;
+  color: white;
+  
+  padding: 10px 50px;
+}
+
+.nav ul {
+  display: flex;
+  gap: 50px;
+  list-style: none;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+
+/*APP STYLES*/
+
+.titles-container {
+  text-align: center;
+  color: black;
+  margin: 50px;
+}
+
+/*HOME STYLES*/
+.home-container {
+  display: flex;
+  justify-content: center;
+  margin: 50px;
+}
+
+.home-text {
+  display: flex;
+  align-items: center;
+  max-width: 500px;
+  font-size: 20px;
+  margin: 25px;
+}
+
+.home-pic {
+  margin: 25px;
+}
+
+@media only screen and (max-width: 1024px) {
+  .home-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .home-container {
+    margin: 0;
+  }
+  
+  .home-text {
+    margin: 0;
+    margin-bottom: 50px;
+  }
+  
+  .brain-pic {
+    width: 307.5px;
+    height: 302.25px;
+  }
+}
+
+/*ADD & SUBTRACT STYLES*/
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.begin-button {
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  padding: 10px 60px;
+  border-radius: 5px;
+  margin-bottom: 100px;
+  cursor: pointer;
+}
+
+.check-button {
+  background-color: #21c4f4;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid white;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.score {
+  margin-top: 100px;
+}
+
+/*FOOTER STYLES*/
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #21c4f4;
+  color: white;
+  text-align: center;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+@media only screen and (max-width: 501px) {
+  .footer {
+    
+  }
+}
+
+a:link {
+  color: white;
+  text-decoration: none;
+}
+
+a:visited {
+  color: white;
+}
+
+a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+a:active {
+  color: white;
+}
