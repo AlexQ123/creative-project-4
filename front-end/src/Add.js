@@ -1,4 +1,3 @@
-// import React, {Component} from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
@@ -14,6 +13,8 @@ function Add() {
     
     const [selectedPlayer, setSelectedPlayer] = useState({});
     
+    const [playersByScore, setPlayersByScore] = useState([]);
+    
     const beginGame = () => {
         setNum1(generateRandomNumber());
         setNum2(generateRandomNumber());
@@ -26,14 +27,17 @@ function Add() {
         
         let currentScore = score;
         
+        // If the answer is correct, increment the current score.
         if (event.target[0].value !== "" && +num1 + +num2 === +event.target[0].value) {
             currentScore++;
+            // If there is a player selected, and this game's score is higher than their all time high score, update their highest score.
             if (currentScore > selectedPlayer.highscore) {
                 selectedPlayer.highscore = currentScore;
                 updatePlayerScore(currentScore);
             }
         }
         
+        // Make the next question.
         setNum1(generateRandomNumber());
         setNum2(generateRandomNumber());
         setScore(currentScore);
@@ -56,7 +60,10 @@ function Add() {
         try {      
             const response = await axios.get("/api/players");
             setPlayers(response.data.players);
-            console.log(response.data.players);
+            // console.log(response.data.players);
+            
+            // Every time we get the players from the server, we also want to update our leaderboard.
+            updateLeaderboard(response.data.players);
         } catch(error) {
             console.log("error getting players: " + error);
         }
@@ -65,7 +72,7 @@ function Add() {
     const createPlayer = async() => {
         try {
             const response = await axios.post("/api/players", {name: name, nickname: nickname, slogan: slogan});
-            getPlayers();
+            await getPlayers();
             console.log(response.data.player);
             
             setName("");
@@ -79,7 +86,7 @@ function Add() {
     const deletePlayer = async(player) => {
         try {
             await axios.delete("/api/players/" + player.id);
-            getPlayers();
+            await getPlayers();
         } catch(error) {
             console.log("error deleting player: " + error);
         }
@@ -88,7 +95,7 @@ function Add() {
     const updatePlayerScore = async(score) => {
         try {
             const response = await axios.put("/api/players/" + selectedPlayer.id + "/" + score);
-            getPlayers();
+            await getPlayers();
         } catch(error) {
             console.log("error updating player score: " + error);
         }
@@ -97,6 +104,13 @@ function Add() {
     const playerClicked = (player) => {
         setSelectedPlayer(player);
         beginGame();
+    }
+    
+    const updateLeaderboard = (players) => {
+        // Sort the players in decreasing order by their highscore.
+        let sorted = [...players].sort((a, b) => b.highscore - a.highscore);
+        setPlayersByScore(sorted);
+        // console.log(playersByScore);
     }
     
     return (
@@ -157,92 +171,19 @@ function Add() {
             
             <hr className="separator"/>
             
-            <div className="game-highscore">
-                <div className="overall-score-container">
-                    <h1>Overall High Score:</h1>
-                    <div className="overall-score-text">25 (Alex)</div>
+            <div className="game-leaderboard">
+                <div className="">
+                    <h1>Leaderboard</h1>
+                    {playersByScore.map( player => (
+                        <div key={player.id} className="">
+                            {player.name} ({player.highscore})
+                        </div>
+                    ))}
                 </div>
-                
-                <h1>Player High Score:</h1>
-                <div className="player-high-score">20</div>
             </div>
             
         </div>
     );
 }
-
-// class Add extends Component {
-//     constructor(props) {
-//         super(props);
-        
-//         this.state = {
-//             num1: 0,
-//             num2: 0,
-//             score: 0,
-//             players: []
-//         }
-        
-//         this.updateState = this.updateState.bind(this);
-//         this.beginGame = this.beginGame.bind(this);
-//         this.checkAnswer = this.checkAnswer.bind(this);
-//     }
-    
-//     updateState(newNum1, newNum2, newScore) {
-//         this.setState({ num1: newNum1, num2: newNum2, score: newScore });
-//     }
-    
-//     beginGame() {
-//         this.updateState(this.generateRandomNumber(), this.generateRandomNumber(), 0);
-//         this.clearAnswer();  
-//     }
-    
-//     checkAnswer(event) {
-//         event.preventDefault();
-        
-//         let currentScore = this.state.score;
-        
-//         if (event.target[0].value !== "" && +this.state.num1 + +this.state.num2 === +event.target[0].value) {
-//             currentScore++;
-//         }
-        
-//         this.updateState(this.generateRandomNumber(), this.generateRandomNumber(), currentScore);
-//         this.clearAnswer();
-//     }
-    
-//     generateRandomNumber() {
-//         return Math.floor(Math.random() * 10) + 1;
-//     }
-    
-//     clearAnswer() {
-//         document.getElementById("answer-form").reset();
-//     }
-    
-//     render() {
-//         return (
-//             <div className="game-container">
-//                 <div className="game-players">
-//                     Players
-//                 </div>
-                
-//                 <div className="game-main">
-//                     <h1>Add</h1>
-//                     <button onClick={this.beginGame} className="begin-button">Begin!</button>
-                    
-//                     <h1>{this.state.num1} + {this.state.num2} = ?</h1>
-//                     <form id="answer-form" onSubmit={this.checkAnswer}>
-//                         <input type="text"/>
-//                         <button type="submit" className="check-button">Check Answer</button>
-//                     </form>
-                    
-//                     <h1 className="score">Score: {this.state.score}</h1>
-//                 </div>
-                
-//                 <div className="game-highscore">
-//                     High Score
-//                 </div>
-//             </div>
-//         );
-//     }
-// }
 
 export default Add;
