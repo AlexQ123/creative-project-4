@@ -147,7 +147,7 @@ function Add() {
                 <div className="players-container">
                     <h1>Players:</h1>
                     {players.map( player => (
-                        <div key={player.id} className="player">
+                        <div key={player.id} className="player" style={selectedPlayer.id == player.id ? {textDecoration: "underline"} : {}}>
                             <button onClick={e=>playerClicked(player)} className="select-button">Select</button>
                             {player.name} (<em>{player.nickname}</em>): "{player.slogan}"
                             <button onClick={e => deletePlayer(player)} className="delete-button">X</button>
