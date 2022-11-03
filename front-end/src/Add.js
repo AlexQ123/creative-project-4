@@ -174,9 +174,9 @@ function Add() {
             <div className="game-leaderboard">
                 <div className="">
                     <h1>Leaderboard</h1>
-                    {playersByScore.map( player => (
-                        <div key={player.id} className="">
-                            {player.name} ({player.highscore})
+                    {playersByScore.map( (player, index) => (
+                        <div key={player.id} className="leaderboard-entry">
+                            {index+1}. {player.name} ({player.highscore})
                         </div>
                     ))}
                 </div>
