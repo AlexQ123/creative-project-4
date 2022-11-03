@@ -28,6 +28,10 @@ function Add() {
         
         if (event.target[0].value !== "" && +num1 + +num2 === +event.target[0].value) {
             currentScore++;
+            if (currentScore > selectedPlayer.highscore) {
+                selectedPlayer.highscore = currentScore;
+                updatePlayerScore(currentScore);
+            }
         }
         
         setNum1(generateRandomNumber());
@@ -81,6 +85,20 @@ function Add() {
         }
     }
     
+    const updatePlayerScore = async(score) => {
+        try {
+            const response = await axios.put("/api/players/" + selectedPlayer.id + "/" + score);
+            getPlayers();
+        } catch(error) {
+            console.log("error updating player score: " + error);
+        }
+    }
+    
+    const playerClicked = (player) => {
+        setSelectedPlayer(player);
+        beginGame();
+    }
+    
     return (
         <div className="game-container">
         
@@ -111,15 +129,18 @@ function Add() {
                 </div>
                 
                 <div className="players-container">
-                    <h1>Players</h1>
+                    <h1>Players:</h1>
                     {players.map( player => (
                         <div key={player.id} className="player">
+                            <button onClick={e=>playerClicked(player)} className="select-button">Select</button>
                             {player.name} (<em>{player.nickname}</em>): "{player.slogan}"
                             <button onClick={e => deletePlayer(player)} className="delete-button">X</button>
                         </div>
                     ))}
                 </div>
             </div>
+            
+            <hr className="separator"/>
             
             <div className="game-main">
                 <h1>Add</h1>
@@ -134,8 +155,16 @@ function Add() {
                 <h1 className="score">Score: {score}</h1>
             </div>
             
+            <hr className="separator"/>
+            
             <div className="game-highscore">
-                <h1>High Score</h1>
+                <div className="overall-score-container">
+                    <h1>Overall High Score:</h1>
+                    <div className="overall-score-text">25 (Alex)</div>
+                </div>
+                
+                <h1>Player High Score:</h1>
+                <div className="player-high-score">20</div>
             </div>
             
         </div>
