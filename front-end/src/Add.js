@@ -1,7 +1,6 @@
 // import React, {Component} from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import './Games.css'; 
 
 function Add() {
     const [num1, setNum1] = useState(0);
@@ -61,6 +60,10 @@ function Add() {
             const response = await axios.post("/api/players", {name: name, nickname: nickname, slogan: slogan});
             getPlayers();
             console.log(response.data.player);
+            
+            setName("");
+            setNickname("");
+            setSlogan("");
         } catch(error) {
             console.log("error adding player: " + error);
         }
@@ -79,12 +82,35 @@ function Add() {
         <div className="game-container">
             <div className="game-players">
                 <h1>Players</h1>
-                    {players.map( player => (
-                        <div key={player.id} className="player">
-                            
-                            <button onClick={e => deletePlayer(player)}>Delete</button>
-                        </div>
-                    ))} 
+                {players.map( player => (
+                    <div key={player.id} className="player">
+                        
+                        <button onClick={e => deletePlayer(player)}>Delete</button>
+                    </div>
+                ))}
+                
+                <h1>Create a player:</h1>
+                <form onSubmit={createPlayer}>
+                    <div>
+                        <label>
+                            Username:
+                            <input type="text" value={name} onChange={e => setName(e.target.value)} />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Nickname:
+                            <input type="text" value={nickname} onChange={e=>setNickname(e.target.value)} />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Slogan:
+                            <input type="text" value={slogan} onChange={e=>setSlogan(e.target.value)} />
+                        </label>
+                    </div>
+                    <input type="submit" value="Create" />
+                </form>
             </div>
             
             <div className="game-main">
