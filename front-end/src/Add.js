@@ -12,9 +12,12 @@ function Add() {
     const [nickname, setNickname] = useState("");
     const [slogan, setSlogan] = useState("");
     
+    const [selectedPlayer, setSelectedPlayer] = useState({});
+    
     const beginGame = () => {
         setNum1(generateRandomNumber());
         setNum2(generateRandomNumber());
+        setScore(0);
         clearAnswer();
     }
     
@@ -80,42 +83,47 @@ function Add() {
     
     return (
         <div className="game-container">
+        
             <div className="game-players">
-                <h1>Players</h1>
-                {players.map( player => (
-                    <div key={player.id} className="player">
-                        
-                        <button onClick={e => deletePlayer(player)}>Delete</button>
-                    </div>
-                ))}
+                <div className="create-container">
+                    <h1>Create a player:</h1>
+                    <form onSubmit={createPlayer}>
+                        <div>
+                            <label>
+                                Username:
+                                <input type="text" value={name} onChange={e => setName(e.target.value)} />
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                Nickname:
+                                <input type="text" value={nickname} onChange={e=>setNickname(e.target.value)} />
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                Slogan:
+                                <input type="text" value={slogan} onChange={e=>setSlogan(e.target.value)} />
+                            </label>
+                        </div>
+                        <input type="submit" value="Create" className="check-button"/>
+                    </form>
+                </div>
                 
-                <h1>Create a player:</h1>
-                <form onSubmit={createPlayer}>
-                    <div>
-                        <label>
-                            Username:
-                            <input type="text" value={name} onChange={e => setName(e.target.value)} />
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            Nickname:
-                            <input type="text" value={nickname} onChange={e=>setNickname(e.target.value)} />
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            Slogan:
-                            <input type="text" value={slogan} onChange={e=>setSlogan(e.target.value)} />
-                        </label>
-                    </div>
-                    <input type="submit" value="Create" />
-                </form>
+                <div className="players-container">
+                    <h1>Players</h1>
+                    {players.map( player => (
+                        <div key={player.id} className="player">
+                            {player.name} (<em>{player.nickname}</em>): "{player.slogan}"
+                            <button onClick={e => deletePlayer(player)} className="delete-button">X</button>
+                        </div>
+                    ))}
+                </div>
             </div>
             
             <div className="game-main">
                 <h1>Add</h1>
-                <button onClick={beginGame} className="begin-button">Begin!</button>
+                <button onClick={beginGame} className="begin-button">New Game</button>
                 
                 <h1>{num1} + {num2} = ?</h1>
                 <form id="answer-form" onSubmit={e => checkAnswer(e)}>
@@ -127,8 +135,9 @@ function Add() {
             </div>
             
             <div className="game-highscore">
-                High Score
+                <h1>High Score</h1>
             </div>
+            
         </div>
     );
 }
