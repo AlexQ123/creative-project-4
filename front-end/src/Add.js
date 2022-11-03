@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+// import React, {Component} from 'react';
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './Games.css'; 
 
@@ -6,7 +7,11 @@ function Add() {
     const [num1, setNum1] = useState(0);
     const [num2, setNum2] = useState(0);
     const [score, setScore] = useState(0);
+    
     const [players, setPlayers] = useState([]);
+    const [name, setName] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [slogan, setSlogan] = useState("");
     
     const beginGame = () => {
         setNum1(generateRandomNumber());
@@ -37,10 +42,49 @@ function Add() {
         document.getElementById("answer-form").reset();
     }
     
+    useEffect(() => {
+        getPlayers();
+    },[]);
+    
+    const getPlayers = async() => {
+        try {      
+            const response = await axios.get("/api/players");
+            setPlayers(response.data.players);
+            console.log(response.data.players);
+        } catch(error) {
+            console.log("error getting players: " + error);
+        }
+    }
+    
+    const createPlayer = async() => {
+        try {
+            const response = await axios.post("/api/players", {name: name, nickname: nickname, slogan: slogan});
+            getPlayers();
+            console.log(response.data.player);
+        } catch(error) {
+            console.log("error adding player: " + error);
+        }
+    }
+    
+    const deletePlayer = async(player) => {
+        try {
+            await axios.delete("/api/players/" + player.id);
+            getPlayers();
+        } catch(error) {
+            console.log("error deleting player: " + error);
+        }
+    }
+    
     return (
         <div className="game-container">
             <div className="game-players">
-                Players
+                <h1>Players</h1>
+                    {players.map( player => (
+                        <div key={player.id} className="player">
+                            
+                            <button onClick={e => deletePlayer(player)}>Delete</button>
+                        </div>
+                    ))} 
             </div>
             
             <div className="game-main">
