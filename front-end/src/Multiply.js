@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-function Add() {
+function Multiply() {
     const [num1, setNum1] = useState(0);
     const [num2, setNum2] = useState(0);
     const [score, setScore] = useState(0);
@@ -28,7 +28,7 @@ function Add() {
         let currentScore = score;
         
         // If the answer is correct, increment the current score.
-        if (event.target[0].value !== "" && +num1 + +num2 === +event.target[0].value) {
+        if (event.target[0].value !== "" && +num1 * +num2 === +event.target[0].value) {
             currentScore++;
             // If there is a player selected, and this game's score is higher than their all time high score, update their highest score.
             if (currentScore > selectedPlayer.highscore) {
@@ -159,10 +159,10 @@ function Add() {
             <hr className="separator"/>
             
             <div className="game-main">
-                <h1>Add</h1>
+                <h1>Multiply</h1>
                 <button onClick={beginGame} className="begin-button">New Game</button>
                 
-                <h1>{num1} + {num2} = ?</h1>
+                <h1>{num1} x {num2} = ?</h1>
                 <form id="answer-form" onSubmit={e => checkAnswer(e)}>
                     <input type="text"/>
                     <button type="submit" className="check-button">Check Answer</button>
@@ -188,4 +188,4 @@ function Add() {
     );
 }
 
-export default Add;
+export default Multiply;
